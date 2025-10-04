@@ -13,10 +13,11 @@ int main()
                 << "2.Двоичное представление введённого int\n"
                 << "3.Двоичное представление введённого float\n"
                 << "4.Двоичное представление введённого double\n"
-                << "5.Замена бита в числе\n";
+                << "5.Замена бита в числе\n"
+                << "6.Поменять местами части мантиссы double\n";
       std::cin >>
           selectedTask;
-      if (selectedTask < 1 || selectedTask > 5 || std::cin.fail())
+      if (selectedTask < 1 || selectedTask > 6 || std::cin.fail())
           break;
       clearConsole();
       switch (selectedTask)
@@ -35,6 +36,9 @@ int main()
         break;
       case 5:
         task5();
+        break;
+      case 6:
+        task6();
         break;
       default:
         break;
