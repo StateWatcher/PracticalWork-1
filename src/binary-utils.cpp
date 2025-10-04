@@ -14,7 +14,6 @@ std::string intToBinaryString(int intNum)
   return binaryString;
 }
 
-
 std::string floatToBinaryString(float floatNum)
 {
   union
@@ -35,7 +34,6 @@ std::string floatToBinaryString(float floatNum)
 
   return binaryString;
 }
-
 
 std::string doubleToBinaryString(double doubleNum)
 {
@@ -59,57 +57,89 @@ std::string doubleToBinaryString(double doubleNum)
   return binaryString;
 }
 
+int changeBitInt(int number, int bitPosition, int newValue)
+{
+  int realPosition = 31 - bitPosition;
+  unsigned int mask = 1u << realPosition;
 
-int changeBitInt(int number, int bitPosition, int newValue) {
-    int realPosition = 31 - bitPosition;
-    unsigned int mask = 1u << realPosition;
-    
-    if (newValue == 1) {
-        number |= mask;
-    } else {
-        number &= ~mask;
-    }
-    
-    return number;
+  if (newValue == 1)
+  {
+    number |= mask;
+  }
+  else
+  {
+    number &= ~mask;
+  }
+
+  return number;
 }
 
-float changeBitFloat(float number, int bitPosition, int newValue) {
-    union {
-        float floatRepresentation;
-        unsigned int intRepresentation;
-    } floatToInt;
-    
-    floatToInt.floatRepresentation = number;
-    
-    int realPosition = 31 - bitPosition;
-    unsigned int mask = 1u << realPosition;
-    
-    if (newValue == 1) {
-        floatToInt.intRepresentation |= mask;
-    } else {
-        floatToInt.intRepresentation &= ~mask;
-    }
-    
-    return floatToInt.floatRepresentation;
+float changeBitFloat(float number, int bitPosition, int newValue)
+{
+  union
+  {
+    float floatRepresentation;
+    unsigned int intRepresentation;
+  } floatToInt;
+
+  floatToInt.floatRepresentation = number;
+
+  int realPosition = 31 - bitPosition;
+  unsigned int mask = 1u << realPosition;
+
+  if (newValue == 1)
+  {
+    floatToInt.intRepresentation |= mask;
+  }
+  else
+  {
+    floatToInt.intRepresentation &= ~mask;
+  }
+
+  return floatToInt.floatRepresentation;
 }
 
+double changeBitDouble(double number, int bitPosition, int newValue)
+{
+  union
+  {
+    double doubleRepresentation;
+    unsigned long long intRepresentation;
+  } doubleToInt;
 
-double changeBitDouble(double number, int bitPosition, int newValue) {
-    union {
-        double doubleRepresentation;
-        unsigned long long intRepresentation;
-    } doubleToInt;
-    
-    doubleToInt.doubleRepresentation = number;
-    
-    int realPosition = 63 - bitPosition;
-    unsigned long long mask = 1ULL << realPosition;
-    
-    if (newValue == 1) {
-        doubleToInt.intRepresentation |= mask;
-    } else {
-        doubleToInt.intRepresentation &= ~mask;
-    }
-    
-    return doubleToInt.doubleRepresentation;
+  doubleToInt.doubleRepresentation = number;
+
+  int realPosition = 63 - bitPosition;
+  unsigned long long mask = 1ULL << realPosition;
+
+  if (newValue == 1)
+  {
+    doubleToInt.intRepresentation |= mask;
+  }
+  else
+  {
+    doubleToInt.intRepresentation &= ~mask;
+  }
+
+  return doubleToInt.doubleRepresentation;
+}
+
+double swapMantissaParts(double number)
+{
+  union
+  {
+    double doubleRepresentation;
+    unsigned long long intRepresentation;
+  } doubleToInt;
+  doubleToInt.doubleRepresentation = number;
+  unsigned long long mask26bits = (1ULL << 26) - 1;
+  unsigned long long lowMantissaMask = mask26bits;
+  unsigned long long highMantissaMask = mask26bits << 26;
+  unsigned long long signAndExponentMask = ((1ULL << 12) - 1) << 52;
+  unsigned long long highPart = (doubleToInt.intRepresentation & highMantissaMask) >> 26;
+  unsigned long long lowPart = (doubleToInt.intRepresentation & lowMantissaMask);
+  unsigned long long signAndExponent = doubleToInt.intRepresentation & signAndExponentMask;
+  doubleToInt.intRepresentation = signAndExponent | (lowPart << 26) | highPart;
+
+  return doubleToInt.doubleRepresentation;
 }
