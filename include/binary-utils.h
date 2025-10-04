@@ -9,5 +9,6 @@ std::string doubleToBinaryString(double doubleNum);
 int changeBitInt(int number, int bitPosition, int newValue);
 float changeBitFloat(float number, int bitPosition, int newValue);
 double changeBitDouble(double number, int bitPosition, int newValue);
+double swapMantissaParts(double number);
 
 #endif
