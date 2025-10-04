@@ -93,7 +93,7 @@ float changeBitFloat(float number, int bitPosition, int newValue) {
     return floatToInt.floatRepresentation;
 }
 
-// Изменение бита в double числе
+
 double changeBitDouble(double number, int bitPosition, int newValue) {
     union {
         double doubleRepresentation;
